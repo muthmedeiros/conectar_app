@@ -27,14 +27,18 @@ Frontend web/mobile app built with **Flutter** for the Conéctar platform.
 
 ### Environment Variables
 
-- A `.example.env` file is included in the root of the project.
-- Copy it to `.env` and fill in the required values before running the app.
+The app supports separate environment files for local and remote/production setups:
 
-Example:
+- `.local.env`: for local development (e.g. localhost API, local tokens)
+- `.env`: for remote/production environment (e.g. production API, secrets)
 
-```bash
-cp .example.env .env
-```
+**How it works:**
+
+- The app automatically loads `.local.env` when running locally (using VS Code's "Flutter Web (Chrome) [Local]" launch config or `--dart-define=ENV=local`).
+- It loads `.env` for remote/production runs (using "Flutter Web (Chrome) [Remote]" or `--dart-define=ENV=remote`).
+- No manual copying is needed; just fill in each file with the appropriate values.
+
+> Both files are ignored by git. Make sure to keep your secrets safe.
 
 ---
 

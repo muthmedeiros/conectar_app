@@ -3,7 +3,11 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 class AppEnv {
   AppEnv._();
 
-  static Future<void> initialize({String fileName = '.env'}) async {
+  static Future<void> initialize() async {
+    const env = String.fromEnvironment('ENV', defaultValue: 'remote');
+
+    final fileName = env == 'local' ? '.local.env' : '.env';
+
     if (!dotenv.isInitialized) {
       await dotenv.load(fileName: fileName);
     }

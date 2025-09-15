@@ -46,3 +46,4 @@ app.*.map.json
 
 # dotenv environment variable files
 .env
+.local.env
