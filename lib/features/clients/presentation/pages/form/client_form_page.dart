@@ -128,7 +128,6 @@ class _ClientFormState extends State<_ClientForm> {
               items: const [
                 DropdownMenuItem(value: 'active', child: Text('Ativo')),
                 DropdownMenuItem(value: 'inactive', child: Text('Inativo')),
-                DropdownMenuItem(value: 'pending', child: Text('Pendente')),
               ],
               onChanged: controller.updateStatus,
               validator: Validators.required('Status'),
@@ -155,17 +154,10 @@ class _ClientFormState extends State<_ClientForm> {
             Visibility(
               visible: !controller.loadingUsers,
               child: DropdownButtonFormField<String>(
-                decoration: const InputDecoration(
-                  labelText: 'Usuário Administrador',
-                ),
+                decoration: const InputDecoration(labelText: 'Usuário Administrador'),
                 value: controller.adminUserId,
                 items: controller.users
-                    .map(
-                      (u) => DropdownMenuItem<String>(
-                        value: u.id,
-                        child: Text(u.name),
-                      ),
-                    )
+                    .map((u) => DropdownMenuItem<String>(value: u.id, child: Text(u.name)))
                     .toList(),
                 onChanged: controller.updateAdminUserId,
                 validator: Validators.required('Usuário Administrador'),
@@ -176,10 +168,7 @@ class _ClientFormState extends State<_ClientForm> {
               visible: controller.errorMsg != null,
               child: Text(
                 controller.errorMsg ?? '',
-                style: TTypography.interMedium(
-                  color: TColors.error,
-                  fontSize: TFontSizes.sm,
-                ),
+                style: TTypography.interMedium(color: TColors.error, fontSize: TFontSizes.sm),
               ),
             ),
             const SizedBox(height: TSpacing.sm),
@@ -187,15 +176,21 @@ class _ClientFormState extends State<_ClientForm> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: controller.loading
-                        ? null
-                        : () => context.pop(false),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: TColors.neutral0,
+                      foregroundColor: TColors.errorDark,
+                    ),
+                    onPressed: controller.loading ? null : () => context.pop(false),
                     child: const Text('Cancelar'),
                   ),
                 ),
                 const SizedBox(width: TSpacing.md),
                 Expanded(
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: TColors.primary,
+                      foregroundColor: TColors.neutral0,
+                    ),
                     onPressed: controller.loading
                         ? null
                         : () async {

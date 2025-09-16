@@ -21,15 +21,15 @@ class _ConectarAppState extends State<ConectarApp> {
   Widget build(BuildContext context) {
     return MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => AuthController(repo: sl<AuthRepository>()),
-        ),
+        ChangeNotifierProvider(create: (_) => AuthController(repo: sl<AuthRepository>())),
       ],
       child: MaterialApp.router(
         debugShowCheckedModeBanner: false,
         title: 'Conéctar',
         theme: AppTheme.light(),
+        // TODO: implement dark theme in the future
         darkTheme: AppTheme.dark(),
+        themeMode: ThemeMode.light,
         routerConfig: _router,
       ),
     );

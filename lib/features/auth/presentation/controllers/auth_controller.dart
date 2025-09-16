@@ -19,9 +19,14 @@ class AuthController extends ChangeNotifier {
 
   bool get isAdmin => user?.isAdmin ?? false;
 
-  bool get canViewAll => policy.canViewAllClients(user);
-  bool get canRegister => policy.canRegisterClients(user);
-  bool get canDelete => policy.canDeleteClients(user);
+  bool get canViewAllClients => policy.canViewAllClients(user);
+  bool get canRegisterClients => policy.canRegisterClients(user);
+  bool get canDeleteClients => policy.canDeleteClients(user);
+  bool canEditClient(String targetUserId) => policy.canEditClient(user, targetUserId);
+
+  bool get canViewAllUsers => policy.canViewAllUsers(user);
+  bool get canRegisterUsers => policy.canRegisterUsers(user);
+  bool canDeleteUser(String targetUserId) => policy.canDeleteUser(user, targetUserId);
 
   Future<bool> login(String email, String password) async {
     loading = true;

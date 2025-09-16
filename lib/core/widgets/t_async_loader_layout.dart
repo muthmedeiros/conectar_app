@@ -13,6 +13,8 @@ class TAsyncLoaderLayout extends StatelessWidget {
     required this.isLoading,
     required this.errorMsg,
     required this.refresh,
+    required this.label,
+    required this.icon,
   });
 
   final Widget child;
@@ -20,6 +22,10 @@ class TAsyncLoaderLayout extends StatelessWidget {
   final String? errorMsg;
   final Function()? refresh;
   final int itemsCount;
+  final String label;
+  final IconData icon;
+
+  String get _labelText => label.toLowerCase();
 
   @override
   Widget build(BuildContext context) {
@@ -35,19 +41,13 @@ class TAsyncLoaderLayout extends StatelessWidget {
             const Icon(Icons.error_outline, size: 64, color: TColors.error),
             const SizedBox(height: TSpacing.md),
             Text(
-              'Erro ao carregar usuários',
-              style: TTypography.interSemiBold(
-                color: TColors.neutral100,
-                fontSize: TFontSizes.lg,
-              ),
+              'Erro ao carregar $_labelText',
+              style: TTypography.interSemiBold(color: TColors.neutral100, fontSize: TFontSizes.lg),
             ),
             const SizedBox(height: TSpacing.sm),
             Text(
               errorMsg!,
-              style: TTypography.interRegular(
-                color: TColors.neutral6,
-                fontSize: TFontSizes.md,
-              ),
+              style: TTypography.interRegular(color: TColors.neutral6, fontSize: TFontSizes.md),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: TSpacing.lg),
@@ -66,22 +66,16 @@ class TAsyncLoaderLayout extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.people_outline, size: 64, color: TColors.neutral6),
+            Icon(icon, size: 64, color: TColors.neutral6),
             const SizedBox(height: TSpacing.md),
             Text(
-              'Nenhum usuário encontrado',
-              style: TTypography.interSemiBold(
-                color: TColors.neutral100,
-                fontSize: TFontSizes.lg,
-              ),
+              'Nenhum $_labelText encontrado',
+              style: TTypography.interSemiBold(color: TColors.neutral100, fontSize: TFontSizes.lg),
             ),
             const SizedBox(height: TSpacing.sm),
             Text(
-              'Tente ajustar os filtros ou criar um novo usuário',
-              style: TTypography.interRegular(
-                color: TColors.neutral6,
-                fontSize: TFontSizes.md,
-              ),
+              'Tente ajustar os filtros ou criar um novo $_labelText',
+              style: TTypography.interRegular(color: TColors.neutral6, fontSize: TFontSizes.md),
               textAlign: TextAlign.center,
             ),
           ],

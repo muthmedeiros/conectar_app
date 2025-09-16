@@ -6,6 +6,7 @@ import '../../../../../../core/theme/tokens/colors.dart';
 import '../../../../../../core/theme/tokens/font_sizes.dart';
 import '../../../../../auth/presentation/controllers/auth_controller.dart';
 import '../../../../domain/entities/client_entity.dart';
+import '../../../controllers/clients_controller.dart';
 import 'delete_client_dialog.dart';
 
 typedef DeleteCallback = void Function();
@@ -19,8 +20,8 @@ class ClientsActionButtons extends StatelessWidget {
   Widget build(BuildContext context) {
     final authController = context.watch<AuthController>();
 
-    final canEdit = authController.canRegister || authController.canViewAll;
-    final canDelete = authController.canDelete;
+    final canEdit = authController.canEditClient(client.id);
+    final canDelete = authController.canDeleteUser(client.id);
 
     return Row(
       children: [
@@ -30,7 +31,13 @@ class ClientsActionButtons extends StatelessWidget {
             color: canEdit ? TColors.primary : TColors.neutral5,
             size: TFontSizes.xl,
           ),
-          onPressed: canEdit ? () => context.push('/home/clients/${client.id}') : null,
+          onPressed: canEdit
+              ? () => context.push('/home/clients/${client.id}').then((didUpdate) {
+                  if (didUpdate == true && context.mounted) {
+                    context.read<ClientsController>().fetch();
+                  }
+                })
+              : null,
           tooltip: 'Editar',
         ),
         IconButton(

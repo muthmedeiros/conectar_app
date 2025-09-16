@@ -7,6 +7,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/theme/tokens/tokens.dart';
 import '../../../../core/validation/validators.dart';
 import '../../../../core/widgets/brand_logo.dart';
+import '../../../../core/widgets/t_password_field.dart';
 import '../controllers/auth_controller.dart';
 
 class LoginPage extends StatefulWidget {
@@ -18,9 +19,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _email = TextEditingController(text: 'admin@conectar.com');
-  final _password = TextEditingController(text: 'admin123');
-  bool _obscure = true;
+  final _emailController = TextEditingController(text: 'admin@conectar.com');
+  final _passwordController = TextEditingController(text: 'admin123');
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +41,7 @@ class _LoginPageState extends State<LoginPage> {
               const SizedBox(height: TSpacing.lg),
               Card(
                 elevation: 0,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(TRadius.md),
-                ),
+                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TRadius.md)),
                 child: Padding(
                   padding: const EdgeInsets.all(TSpacing.lg),
                   child: Form(
@@ -53,46 +51,22 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Email',
-                            style: Theme.of(context).textTheme.labelMedium,
-                          ),
+                          child: Text('Email', style: Theme.of(context).textTheme.labelMedium),
                         ),
                         const SizedBox(height: TSpacing.sm),
                         TextFormField(
-                          controller: _email,
+                          controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
-                          decoration: const InputDecoration(
-                            hintText: 'email@dominio.com',
-                          ),
+                          decoration: const InputDecoration(hintText: 'email@dominio.com'),
                           validator: Validators.email('Email'),
                         ),
                         const SizedBox(height: TSpacing.sm + 4),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text(
-                            'Senha',
-                            style: Theme.of(context).textTheme.labelMedium,
-                          ),
+                          child: Text('Senha', style: Theme.of(context).textTheme.labelMedium),
                         ),
                         const SizedBox(height: TSpacing.sm),
-                        TextFormField(
-                          controller: _password,
-                          obscureText: _obscure,
-                          decoration: InputDecoration(
-                            hintText: '•••••••••',
-                            suffixIcon: IconButton(
-                              onPressed: () =>
-                                  setState(() => _obscure = !_obscure),
-                              icon: Icon(
-                                _obscure
-                                    ? Icons.visibility
-                                    : Icons.visibility_off,
-                              ),
-                            ),
-                          ),
-                          validator: Validators.minLen(4, 'Password'),
-                        ),
+                        TPasswordField(controller: _passwordController),
                         const SizedBox(height: TSpacing.md),
                         Visibility(
                           visible: auth.errorMsg != null,
@@ -109,12 +83,8 @@ class _LoginPageState extends State<LoginPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(TRadius.sm),
                               ),
-                              padding: const EdgeInsets.symmetric(
-                                vertical: TSpacing.md,
-                              ),
-                              textStyle: Theme.of(
-                                context,
-                              ).textTheme.labelMedium,
+                              padding: const EdgeInsets.symmetric(vertical: TSpacing.md),
+                              textStyle: Theme.of(context).textTheme.labelMedium,
                             ),
                             onPressed: auth.loading
                                 ? null
@@ -123,8 +93,8 @@ class _LoginPageState extends State<LoginPage> {
                                       return;
                                     }
                                     final ok = await auth.login(
-                                      _email.text.trim(),
-                                      _password.text,
+                                      _emailController.text.trim(),
+                                      _passwordController.text,
                                     );
                                     if (ok && mounted) context.go('/home');
                                   },

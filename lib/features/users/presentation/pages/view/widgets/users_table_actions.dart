@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../../core/theme/tokens/colors.dart';
 import '../../../../../../core/theme/tokens/font_sizes.dart';
+import '../../../../../auth/presentation/controllers/auth_controller.dart';
 import '../../../../domain/entities/user_entity.dart';
 import '../../../controllers/users_controller.dart';
 import 'delete_user_dialog.dart';
@@ -15,10 +16,10 @@ class UsersTableActions extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = context.watch<UsersController>();
+    final authController = context.watch<AuthController>();
 
-    final canEdit = controller.canEditUser(user);
-    final canDelete = controller.canDeleteUser(user);
+    final canEdit = authController.canEditClient(user.id);
+    final canDelete = authController.canDeleteUser(user.id);
 
     return Row(
       mainAxisSize: MainAxisSize.min,
@@ -30,7 +31,11 @@ class UsersTableActions extends StatelessWidget {
             size: TFontSizes.xl,
           ),
           onPressed: canEdit
-              ? () => context.push('/home/users/${user.id}')
+              ? () => context.push('/home/users/${user.id}').then((didUpdate) {
+                  if (didUpdate == true && context.mounted) {
+                    context.read<UsersController>().fetch();
+                  }
+                })
               : null,
           tooltip: 'Editar',
         ),
@@ -41,11 +46,7 @@ class UsersTableActions extends StatelessWidget {
             size: TFontSizes.xl,
           ),
           onPressed: canDelete
-              ? () => showDeleteUserDialog(
-                  context: context,
-                  userId: user.id,
-                  userName: user.name,
-                )
+              ? () => showDeleteUserDialog(context: context, userId: user.id, userName: user.name)
               : null,
           tooltip: 'Excluir',
         ),

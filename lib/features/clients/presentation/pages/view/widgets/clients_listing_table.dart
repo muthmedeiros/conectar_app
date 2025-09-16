@@ -17,6 +17,8 @@ class ClientsListingTable extends StatelessWidget {
     final controller = context.watch<ClientsController>();
 
     return TAsyncLoaderLayout(
+      label: 'Cliente',
+      icon: Icons.business_center,
       isLoading: controller.loading,
       errorMsg: controller.errorMsg,
       refresh: controller.fetch,
@@ -26,13 +28,8 @@ class ClientsListingTable extends StatelessWidget {
           items: controller.items,
           itemBuilder: (_, c) => Card(
             color: TColors.background,
-            margin: const EdgeInsets.symmetric(
-              horizontal: TSpacing.sm,
-              vertical: TSpacing.xs,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(TRadius.md),
-            ),
+            margin: const EdgeInsets.symmetric(horizontal: TSpacing.sm, vertical: TSpacing.xs),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TRadius.md)),
             child: Padding(
               padding: const EdgeInsets.all(TSpacing.md),
               child: Row(

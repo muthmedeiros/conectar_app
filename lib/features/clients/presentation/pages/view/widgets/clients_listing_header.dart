@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../../../core/theme/tokens/tokens.dart';
+import '../../../../../auth/presentation/controllers/auth_controller.dart';
 import '../../../controllers/clients_controller.dart';
 
 class ClientsListingHeader extends StatelessWidget {
@@ -11,6 +12,7 @@ class ClientsListingHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = context.watch<ClientsController>();
+    final authController = context.watch<AuthController>();
 
     return Row(
       children: [
@@ -27,40 +29,28 @@ class ClientsListingHeader extends StatelessWidget {
               ),
               Text(
                 'Selecione um usuário para ver os detalhes',
-                style: TTypography.interRegular(
-                  color: TColors.neutral6,
-                  fontSize: TFontSizes.sm,
-                ),
+                style: TTypography.interRegular(color: TColors.neutral6, fontSize: TFontSizes.sm),
               ),
             ],
           ),
         ),
-        OutlinedButton(
-          style: ElevatedButton.styleFrom(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(TRadius.xs),
+        Visibility(
+          visible: authController.canRegisterClients,
+          child: OutlinedButton(
+            style: ElevatedButton.styleFrom(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TRadius.xs)),
+              side: const BorderSide(),
+              backgroundColor: TColors.neutral3,
+              padding: const EdgeInsets.symmetric(horizontal: TSpacing.xxl, vertical: TSpacing.md),
             ),
-            side: const BorderSide(),
-            backgroundColor: TColors.neutral3,
-            padding: const EdgeInsets.symmetric(
-              horizontal: TSpacing.xxl,
-              vertical: TSpacing.md,
-            ),
-          ),
-          onPressed: () => context.push('/home/clients/new').then((didCreate) {
-            if (didCreate == true && context.mounted) {
-              controller.fetch();
-
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text('Cliente criado com sucesso!')),
-              );
-            }
-          }),
-          child: Text(
-            'Novo',
-            style: TTypography.interMedium(
-              color: TColors.neutral100,
-              fontSize: TFontSizes.sm,
+            onPressed: () => context.push('/home/clients/new').then((didCreate) {
+              if (didCreate == true && context.mounted) {
+                controller.fetch();
+              }
+            }),
+            child: Text(
+              'Novo',
+              style: TTypography.interMedium(color: TColors.neutral100, fontSize: TFontSizes.sm),
             ),
           ),
         ),

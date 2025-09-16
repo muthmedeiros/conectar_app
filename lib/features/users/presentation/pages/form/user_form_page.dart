@@ -8,6 +8,7 @@ import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/enums/user_role.dart';
 import '../../../../../core/theme/tokens/tokens.dart';
 import '../../../../../core/validation/validators.dart';
+import '../../../../../core/widgets/t_password_field.dart';
 import '../../../../auth/presentation/controllers/auth_controller.dart';
 import '../../../domain/repositories/user_repository.dart';
 import '../../controllers/user_form_controller.dart';
@@ -36,10 +37,10 @@ class _UserForm extends StatefulWidget {
 }
 
 class _UserFormState extends State<_UserForm> {
-  final _form = GlobalKey<FormState>();
-  final _name = TextEditingController();
-  final _email = TextEditingController();
-  final _password = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
+  final _nameController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
 
   @override
   void initState() {
@@ -50,11 +51,11 @@ class _UserFormState extends State<_UserForm> {
 
       // Update controllers when user data is loaded
       controller.addListener(() {
-        if (controller.name != null && _name.text != controller.name) {
-          _name.text = controller.name!;
+        if (controller.name != null && _nameController.text != controller.name) {
+          _nameController.text = controller.name!;
         }
-        if (controller.email != null && _email.text != controller.email) {
-          _email.text = controller.email!;
+        if (controller.email != null && _emailController.text != controller.email) {
+          _emailController.text = controller.email!;
         }
       });
     });
@@ -62,9 +63,9 @@ class _UserFormState extends State<_UserForm> {
 
   @override
   void dispose() {
-    _name.dispose();
-    _email.dispose();
-    _password.dispose();
+    _nameController.dispose();
+    _emailController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -81,7 +82,7 @@ class _UserFormState extends State<_UserForm> {
       padding: const EdgeInsets.all(TSpacing.xxxl),
 
       child: Form(
-        key: _form,
+        key: _formKey,
         child: ListView(
           children: [
             Row(
@@ -100,35 +101,25 @@ class _UserFormState extends State<_UserForm> {
             const SizedBox(height: TSpacing.xxl),
             const SizedBox(height: TSpacing.lg),
             TextFormField(
-              controller: _name,
-              decoration: const InputDecoration(
-                labelText: 'Nome',
-                prefixIcon: Icon(Icons.person),
-              ),
+              controller: _nameController,
+              decoration: const InputDecoration(labelText: 'Nome', prefixIcon: Icon(Icons.person)),
               validator: Validators.required('Nome'),
               onChanged: controller.updateName,
             ),
             const SizedBox(height: TSpacing.md),
             TextFormField(
-              controller: _email,
-              decoration: const InputDecoration(
-                labelText: 'Email',
-                prefixIcon: Icon(Icons.email),
-              ),
+              controller: _emailController,
+              decoration: const InputDecoration(labelText: 'Email', prefixIcon: Icon(Icons.email)),
               validator: Validators.email(),
               keyboardType: TextInputType.emailAddress,
               onChanged: controller.updateEmail,
             ),
             if (!isEdit) ...[
               const SizedBox(height: TSpacing.md),
-              TextFormField(
-                controller: _password,
-                decoration: const InputDecoration(
-                  labelText: 'Senha',
-                  prefixIcon: Icon(Icons.lock),
-                ),
-                validator: Validators.required('Senha'),
-                obscureText: true,
+              TPasswordField(
+                controller: _passwordController,
+                prefixIcon: Icons.lock,
+                label: 'Senha',
                 onChanged: controller.updatePassword,
               ),
             ],
@@ -139,8 +130,7 @@ class _UserFormState extends State<_UserForm> {
                 labelText: 'Perfil',
                 prefixIcon: Icon(Icons.admin_panel_settings),
               ),
-              validator: (value) =>
-                  value == null ? 'Perfil é obrigatório' : null,
+              validator: (value) => value == null ? 'Perfil é obrigatório' : null,
               items: UserRole.values.map((role) {
                 return DropdownMenuItem<UserRole>(
                   value: role,
@@ -154,10 +144,7 @@ class _UserFormState extends State<_UserForm> {
               visible: controller.errorMsg != null,
               child: Text(
                 controller.errorMsg ?? '',
-                style: TTypography.interMedium(
-                  color: TColors.error,
-                  fontSize: TFontSizes.sm,
-                ),
+                style: TTypography.interMedium(color: TColors.error, fontSize: TFontSizes.sm),
               ),
             ),
             const SizedBox(height: TSpacing.sm),
@@ -165,19 +152,25 @@ class _UserFormState extends State<_UserForm> {
               children: [
                 Expanded(
                   child: ElevatedButton(
-                    onPressed: controller.loading
-                        ? null
-                        : () => context.pop(false),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: TColors.neutral0,
+                      foregroundColor: TColors.errorDark,
+                    ),
+                    onPressed: controller.loading ? null : () => context.pop(false),
                     child: const Text('Cancelar'),
                   ),
                 ),
                 const SizedBox(width: TSpacing.md),
                 Expanded(
                   child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: TColors.primary,
+                      foregroundColor: TColors.neutral0,
+                    ),
                     onPressed: controller.loading
                         ? null
                         : () async {
-                            if (!_form.currentState!.validate()) return;
+                            if (!_formKey.currentState!.validate()) return;
 
                             final success = await controller.save();
 

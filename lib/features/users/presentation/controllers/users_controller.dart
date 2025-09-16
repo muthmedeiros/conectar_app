@@ -150,10 +150,10 @@ class UsersController extends ChangeNotifier {
   }
 
   bool canEditUser(UserEntity user) {
-    return policy.canEditUser(auth.user, user);
+    return policy.canEditUser(auth.user, user.id);
   }
 
   bool canDeleteUser(UserEntity user) {
-    return policy.canDeleteUser(auth.user, user);
+    return policy.canDeleteUser(auth.user, user.id);
   }
 }

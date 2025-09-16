@@ -104,7 +104,7 @@ class ClientsController extends ChangeNotifier {
   }
 
   Future<bool> deleteClient(String id) async {
-    if (!auth.canDelete) {
+    if (!auth.canDeleteClients) {
       errorMsg = 'You don’t have permission to delete clients.';
       notifyListeners();
       return false;

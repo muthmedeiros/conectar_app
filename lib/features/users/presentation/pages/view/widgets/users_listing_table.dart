@@ -32,6 +32,8 @@ class UsersListingTable extends StatelessWidget {
     final controller = context.watch<UsersController>();
 
     return TAsyncLoaderLayout(
+      label: 'Usuário',
+      icon: Icons.person,
       isLoading: controller.loading,
       errorMsg: controller.errorMsg,
       refresh: controller.fetch,
@@ -41,13 +43,8 @@ class UsersListingTable extends StatelessWidget {
           items: controller.items,
           itemBuilder: (_, user) => Card(
             color: TColors.background,
-            margin: const EdgeInsets.symmetric(
-              horizontal: TSpacing.sm,
-              vertical: TSpacing.xs,
-            ),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(TRadius.md),
-            ),
+            margin: const EdgeInsets.symmetric(horizontal: TSpacing.sm, vertical: TSpacing.xs),
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TRadius.md)),
             child: Padding(
               padding: const EdgeInsets.all(TSpacing.md),
               child: Row(
@@ -144,9 +141,7 @@ class UsersListingTable extends StatelessWidget {
                         vertical: TSpacing.xs,
                       ),
                       decoration: BoxDecoration(
-                        color: user.role.isAdmin
-                            ? TColors.secondary
-                            : TColors.primary,
+                        color: user.role.isAdmin ? TColors.secondary : TColors.primary,
                         borderRadius: BorderRadius.circular(TRadius.sm),
                       ),
                       child: Text(
@@ -177,13 +172,7 @@ class UsersListingTable extends StatelessWidget {
                       ),
                     ),
                   ),
-                  DataCell(
-                    Text(
-                      user.lastLogin != null
-                          ? user.lastLoginFormatted!
-                          : 'Nunca',
-                    ),
-                  ),
+                  DataCell(Text(user.lastLogin != null ? user.lastLoginFormatted! : 'Nunca')),
                   DataCell(Text(user.createdAtFormatted)),
                   DataCell(UsersTableActions(user: user)),
                 ],
