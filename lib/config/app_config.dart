@@ -16,6 +16,9 @@ import '../features/auth/domain/repositories/auth_repository.dart';
 import '../features/clients/data/datasources/client_remote_ds.dart';
 import '../features/clients/data/repositories/client_repository_impl.dart';
 import '../features/clients/domain/repositories/client_repository.dart';
+import '../features/profile/data/datasources/profile_remote_ds.dart';
+import '../features/profile/data/repositories/profile_repository_impl.dart';
+import '../features/profile/domain/repositories/profile_repository.dart';
 import '../features/users/data/datasources/user_remote_ds.dart';
 import '../features/users/data/repositories/user_repository_impl.dart';
 import '../features/users/domain/repositories/user_repository.dart';
@@ -52,5 +55,8 @@ class AppConfig {
     // Users
     sl.registerLazySingleton<IUserRemoteDS>(() => UserRemoteDSImpl(sl()));
     sl.registerLazySingleton<UserRepository>(() => UserRepositoryImpl(sl()));
+    // Profile
+    sl.registerLazySingleton<IProfileRemoteDS>(() => ProfileRemoteDataSourceImpl(sl()));
+    sl.registerLazySingleton<ProfileRepository>(() => ProfileRepositoryImpl(sl()));
   }
 }

@@ -3,12 +3,22 @@ import 'package:flutter/material.dart';
 import '../validation/validators.dart';
 
 class TPasswordField extends StatefulWidget {
-  const TPasswordField({super.key, this.controller, this.label, this.prefixIcon, this.onChanged});
+  const TPasswordField({
+    super.key,
+    this.controller,
+    this.label,
+    this.prefixIcon,
+    this.onChanged,
+    this.validator,
+    this.required = true,
+  });
 
   final TextEditingController? controller;
   final String? label;
   final IconData? prefixIcon;
   final Function(String)? onChanged;
+  final String? Function(String?)? validator;
+  final bool required;
 
   @override
   State<TPasswordField> createState() => _TPasswordFieldState();
@@ -47,7 +57,7 @@ class _TPasswordFieldState extends State<TPasswordField> {
           icon: Icon(_obscure ? Icons.visibility : Icons.visibility_off),
         ),
       ),
-      validator: Validators.minLen(4, 'Senha'),
+      validator: widget.required ? widget.validator ?? Validators.minLen(4, 'Senha') : null,
     );
   }
 }
