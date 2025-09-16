@@ -5,8 +5,9 @@ import '../../../../core/errors/error_mapper.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../../../core/security/access_policy.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
-import '../../domain/entities/client.dart';
+import '../../domain/entities/client_entity.dart';
 import '../../domain/repositories/client_repository.dart';
+import '../../data/dtos/update_client_dto.dart';
 
 class EditClientController extends ChangeNotifier {
   EditClientController({required this.repo, required this.auth}) : policy = AccessPolicy();
@@ -20,7 +21,7 @@ class EditClientController extends ChangeNotifier {
 
   ClientEntity? client;
 
-  bool get canEdit => client == null ? false : policy.canEditClient(auth.user, client!.ownerUserId);
+  bool get canEdit => client == null ? false : policy.canEditClient(auth.user, client!.adminUserId);
 
   Future<void> load(String id) async {
     loading = true;
@@ -41,7 +42,7 @@ class EditClientController extends ChangeNotifier {
     }
   }
 
-  Future<bool> update({required String name, required String document}) async {
+  Future<bool> update(UpdateClientDto dto) async {
     if (client == null) return false;
 
     if (!canEdit) {
@@ -52,11 +53,10 @@ class EditClientController extends ChangeNotifier {
 
     loading = true;
     errorMsg = null;
-
     notifyListeners();
 
     try {
-      final updated = await repo.update(client!.id, name: name, document: document);
+      final updated = await repo.update(client!.id, dto);
       client = updated;
       return true;
     } on DioException catch (e) {

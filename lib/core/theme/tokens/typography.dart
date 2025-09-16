@@ -7,4 +7,32 @@ class TTypography {
 
   static TextTheme darkTextTheme() =>
       GoogleFonts.interTextTheme(const TextTheme());
+
+  static TextStyle interRegular({Color? color, double? fontSize}) =>
+      GoogleFonts.inter(
+        fontWeight: FontWeight.w400,
+        color: color,
+        fontSize: fontSize,
+      );
+
+  static TextStyle interMedium({Color? color, double? fontSize}) =>
+      GoogleFonts.inter(
+        fontWeight: FontWeight.w500,
+        color: color,
+        fontSize: fontSize,
+      );
+
+  static TextStyle interSemiBold({Color? color, double? fontSize}) =>
+      GoogleFonts.inter(
+        fontWeight: FontWeight.w600,
+        color: color,
+        fontSize: fontSize,
+      );
+
+  static TextStyle interBold({Color? color, double? fontSize}) =>
+      GoogleFonts.inter(
+        fontWeight: FontWeight.w700,
+        color: color,
+        fontSize: fontSize,
+      );
 }

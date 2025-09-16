@@ -17,30 +17,27 @@ class _ProfilePageState extends State<ProfilePage> {
     final auth = context.watch<AuthController>();
     final user = auth.user;
 
-    return Scaffold(
-      appBar: AppBar(title: const Text('My Profile')),
-      body: user == null
-          ? const Center(child: Text('No user loaded'))
-          : Padding(
-              padding: EdgeInsets.all(TSpacing.md),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text('Name: ${user.name}'),
-                  SizedBox(height: TSpacing.sm),
-                  Text('Email: ${user.email}'),
-                  SizedBox(height: TSpacing.sm),
-                  Text('Role: ${user.isAdmin ? 'Admin' : 'User'}'),
-                  SizedBox(height: TSpacing.md),
-                  FilledButton(
-                    onPressed: () {
-                      /* TODO: open edit form */
-                    },
-                    child: const Text('Edit Profile'),
-                  ),
-                ],
-              ),
+    return user == null
+        ? const Center(child: Text('No user loaded'))
+        : Padding(
+            padding: const EdgeInsets.all(TSpacing.md),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Name: ${user.name}'),
+                const SizedBox(height: TSpacing.sm),
+                Text('Email: ${user.email}'),
+                const SizedBox(height: TSpacing.sm),
+                Text('Role: ${user.isAdmin ? 'Admin' : 'User'}'),
+                const SizedBox(height: TSpacing.md),
+                FilledButton(
+                  onPressed: () {
+                    /* TODO: open edit form */
+                  },
+                  child: const Text('Edit Profile'),
+                ),
+              ],
             ),
-    );
+          );
   }
 }

@@ -31,22 +31,25 @@ class AppTheme {
       textTheme: TTypography.lightTextTheme(),
       scaffoldBackgroundColor: TColors.background,
       inputDecorationTheme: InputDecorationTheme(
-        contentPadding: const EdgeInsets.symmetric(horizontal: TSpacing.md, vertical: TSpacing.sm),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: TSpacing.md,
+          vertical: TSpacing.sm,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(TRadius.sm),
-          borderSide: BorderSide(color: TColors.outline),
+          borderSide: const BorderSide(color: TColors.outline),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(TRadius.sm),
-          borderSide: BorderSide(color: TColors.outline),
+          borderSide: const BorderSide(color: TColors.outline),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(TRadius.sm),
-          borderSide: BorderSide(color: TColors.primary, width: 2),
+          borderSide: const BorderSide(color: TColors.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(TRadius.sm),
-          borderSide: BorderSide(color: TColors.error),
+          borderSide: const BorderSide(color: TColors.error),
         ),
         fillColor: TColors.surfaceVariant,
       ),
@@ -56,17 +59,21 @@ class AppTheme {
           foregroundColor: TColors.onPrimary,
           disabledBackgroundColor: TColors.neutral4,
           disabledForegroundColor: TColors.neutral7,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TRadius.sm)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(TRadius.sm),
+          ),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: TColors.surface,
           foregroundColor: TColors.primary,
-          side: BorderSide(color: TColors.outline),
+          side: const BorderSide(color: TColors.outline),
           disabledBackgroundColor: TColors.neutral3,
           disabledForegroundColor: TColors.neutral6,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TRadius.sm)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(TRadius.sm),
+          ),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
@@ -79,7 +86,9 @@ class AppTheme {
         color: TColors.surface,
         surfaceTintColor: TColors.surfaceVariant,
         shadowColor: TColors.neutral5.withOpacity(0.1),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TRadius.md)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(TRadius.md),
+        ),
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: TColors.surface,
@@ -115,22 +124,25 @@ class AppTheme {
       textTheme: TTypography.darkTextTheme(),
       scaffoldBackgroundColor: TColors.backgroundDark,
       inputDecorationTheme: InputDecorationTheme(
-        contentPadding: const EdgeInsets.symmetric(horizontal: TSpacing.md, vertical: TSpacing.sm),
+        contentPadding: const EdgeInsets.symmetric(
+          horizontal: TSpacing.md,
+          vertical: TSpacing.sm,
+        ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(TRadius.sm),
-          borderSide: BorderSide(color: TColors.outlineDark),
+          borderSide: const BorderSide(color: TColors.outlineDark),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(TRadius.sm),
-          borderSide: BorderSide(color: TColors.outlineDark),
+          borderSide: const BorderSide(color: TColors.outlineDark),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(TRadius.sm),
-          borderSide: BorderSide(color: TColors.primary, width: 2),
+          borderSide: const BorderSide(color: TColors.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(TRadius.sm),
-          borderSide: BorderSide(color: TColors.error),
+          borderSide: const BorderSide(color: TColors.error),
         ),
         fillColor: TColors.surfaceVariantDark,
       ),
@@ -140,17 +152,21 @@ class AppTheme {
           foregroundColor: TColors.onPrimary,
           disabledBackgroundColor: TColors.neutral8,
           disabledForegroundColor: TColors.neutral6,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TRadius.sm)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(TRadius.sm),
+          ),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           backgroundColor: TColors.surfaceDark,
           foregroundColor: TColors.primary,
-          side: BorderSide(color: TColors.outlineDark),
+          side: const BorderSide(color: TColors.outlineDark),
           disabledBackgroundColor: TColors.neutral9,
           disabledForegroundColor: TColors.neutral7,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TRadius.sm)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(TRadius.sm),
+          ),
         ),
       ),
       textButtonTheme: TextButtonThemeData(
@@ -163,7 +179,9 @@ class AppTheme {
         color: TColors.surfaceDark,
         surfaceTintColor: TColors.surfaceVariantDark,
         shadowColor: TColors.neutral100.withOpacity(0.2),
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TRadius.md)),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(TRadius.md),
+        ),
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: TColors.surfaceDark,

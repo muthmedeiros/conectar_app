@@ -1,4 +1,5 @@
 import 'package:conectar_app/core/di/service_locator.dart';
+import 'package:conectar_app/core/enums/user_role.dart';
 import 'package:conectar_app/features/auth/domain/entities/user.dart';
 import 'package:conectar_app/features/auth/domain/repositories/auth_repository.dart';
 import 'package:conectar_app/features/auth/presentation/controllers/auth_controller.dart';
@@ -22,7 +23,9 @@ void main() {
         email: any(named: 'email'),
         password: any(named: 'password'),
       ),
-    ).thenAnswer((_) async => const User(id: '1', name: 'Murilo', email: 'm@x', isAdmin: true));
+    ).thenAnswer(
+      (_) async => const User(id: '1', name: 'Murilo', email: 'm@x', role: UserRole.admin),
+    );
 
     final c = AuthController(repo: sl<AuthRepository>());
     final ok = await c.login('m@x', 'pass');

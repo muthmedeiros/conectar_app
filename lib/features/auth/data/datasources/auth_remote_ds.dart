@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 abstract class IAuthRemoteDS {
   Future<Map<String, dynamic>> login(String email, String password);
-  Future<Map<String, dynamic>> getCurrentUser();
+  Future<Map<String, dynamic>> getCurrentUser(String uuid);
 }
 
 class AuthRemoteDSImpl implements IAuthRemoteDS {
@@ -20,8 +20,8 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
   }
 
   @override
-  Future<Map<String, dynamic>> getCurrentUser() async {
-    final res = await _dio.get('/auth/user');
+  Future<Map<String, dynamic>> getCurrentUser(String uuid) async {
+    final res = await _dio.get('/users/$uuid');
 
     final response = Map<String, dynamic>.from(res.data as Map);
 

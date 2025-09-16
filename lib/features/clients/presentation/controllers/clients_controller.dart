@@ -1,11 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 
+import '../../../../core/enums/order_direction.dart';
 import '../../../../core/errors/error_mapper.dart';
 import '../../../../core/logging/app_logger.dart';
 import '../../../../core/security/access_policy.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
-import '../../domain/entities/client.dart';
+import '../../domain/entities/client_entity.dart';
+import '../../domain/entities/client_query_params.dart';
+import '../../domain/enums/client_order_by.dart';
+import '../../domain/enums/client_status.dart';
 import '../../domain/repositories/client_repository.dart';
 
 class ClientsController extends ChangeNotifier {
@@ -15,24 +19,39 @@ class ClientsController extends ChangeNotifier {
   final AuthController auth;
   final AccessPolicy policy;
 
-  bool get canViewAll => policy.canViewAllClients(auth.user);
-  bool get canRegister => policy.canRegisterClients(auth.user);
-  bool get canDelete => policy.canDeleteClients(auth.user);
-
   var loading = false;
   String? errorMsg;
-  String? query;
+
+  String? search;
+  ClientStatus? status;
+  bool? conectarPlus;
+  ClientOrderBy? orderBy = ClientOrderBy.createdAt;
+  OrderDirection? order = OrderDirection.desc;
+  int page = 1;
+  int limit = 20;
+  int totalPages = 0;
 
   List<ClientEntity> items = [];
 
   Future<void> fetch() async {
     loading = true;
     errorMsg = null;
-
     notifyListeners();
 
+    final queryParams = ClientQueryParams(
+      search: search,
+      status: status,
+      conectarPlus: conectarPlus,
+      orderBy: orderBy,
+      order: order,
+      page: page,
+      limit: limit,
+    );
+
     try {
-      items = await repo.list(admin: canViewAll, query: query);
+      final paginated = await repo.list(queryParams);
+      items = paginated.clients;
+      totalPages = paginated.totalPages;
     } on DioException catch (e) {
       final err = ErrorMapper.fromDio(e);
       errorMsg = err.message;
@@ -46,13 +65,43 @@ class ClientsController extends ChangeNotifier {
     }
   }
 
-  void setQuery(String? q) {
-    query = (q?.trim().isEmpty ?? true) ? null : q!.trim();
-    fetch();
+  void setSearch(String? value) {
+    search = (value?.trim().isEmpty ?? true) ? null : value!.trim();
+    notifyListeners();
+  }
+
+  void setStatus(ClientStatus? value) {
+    status = value;
+    notifyListeners();
+  }
+
+  void setConectarPlus(bool? value) {
+    conectarPlus = value;
+    notifyListeners();
+  }
+
+  void setOrderBy(ClientOrderBy? value) {
+    orderBy = value;
+    notifyListeners();
+  }
+
+  void setOrder(OrderDirection? value) {
+    order = value;
+    notifyListeners();
+  }
+
+  void setPage(int value) {
+    page = value;
+    notifyListeners();
+  }
+
+  void setLimit(int value) {
+    limit = value;
+    notifyListeners();
   }
 
   Future<bool> deleteClient(String id) async {
-    if (!canDelete) {
+    if (!auth.canDelete) {
       errorMsg = 'You don’t have permission to delete clients.';
       notifyListeners();
       return false;
@@ -75,5 +124,15 @@ class ClientsController extends ChangeNotifier {
       loading = false;
       notifyListeners();
     }
+  }
+
+  void clearFilters() {
+    setSearch(null);
+    setStatus(null);
+    setConectarPlus(null);
+    setOrderBy(ClientOrderBy.createdAt);
+    setOrder(OrderDirection.desc);
+
+    fetch();
   }
 }

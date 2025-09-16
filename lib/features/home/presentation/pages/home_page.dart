@@ -5,9 +5,12 @@ import 'package:provider/provider.dart';
 import '../../../../core/theme/tokens/spacing.dart';
 import '../../../../core/widgets/brand_logo.dart';
 import '../../../auth/presentation/controllers/auth_controller.dart';
+import '../widgets/appbar_navigation_button.dart';
 
 class HomePage extends StatefulWidget {
-  const HomePage({super.key});
+  const HomePage({super.key, this.child});
+
+  final Widget? child;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -40,13 +43,16 @@ class _HomePageState extends State<HomePage> {
         titleSpacing: 0,
         title: Row(
           children: [
-            SizedBox(width: TSpacing.sm),
-            BrandLogo(height: TSpacing.xl, tintColor: scheme.onPrimary),
-            SizedBox(width: TSpacing.md),
-            Text(
-              'Clientes',
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(color: scheme.onPrimary),
-            ),
+            const SizedBox(width: TSpacing.sm),
+            BrandLogo(height: TSpacing.xxl, tintColor: scheme.onPrimary),
+            const SizedBox(width: TSpacing.md),
+            const AppbarNavigationButton(label: 'Clientes', route: '/home/clients'),
+            const SizedBox(width: TSpacing.md),
+            const AppbarNavigationButton(label: 'Perfil', route: '/home/profile'),
+            if (auth.user != null && auth.user!.isAdmin) ...[
+              const SizedBox(width: TSpacing.md),
+              const AppbarNavigationButton(label: 'Usuários', route: '/home/users'),
+            ],
           ],
         ),
         actions: [
@@ -62,25 +68,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      body: Center(
-        child: Wrap(
-          spacing: TSpacing.md,
-          runSpacing: TSpacing.md,
-          children: [
-            FilledButton.tonal(
-              onPressed: () => context.go('/home/clients'),
-              child: const Text('Clients'),
-            ),
-            Visibility(
-              visible: auth.isAdmin,
-              child: FilledButton(
-                onPressed: () => context.go('/home/clients/new'),
-                child: const Text('Register Client'),
-              ),
-            ),
-          ],
-        ),
-      ),
+      body: widget.child,
     );
   }
 }

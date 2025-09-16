@@ -1,11 +1,17 @@
 import 'package:dio/dio.dart';
 
+import '../../domain/entities/client_query_params.dart';
+import '../dtos/create_client_dto.dart';
+import '../dtos/update_client_dto.dart';
+import '../mappers/client_list_params_mapper.dart';
+
 abstract class IClientRemoteDS {
-  Future<List<Map<String, dynamic>>> list({required bool admin, String? q});
-  Future<Map<String, dynamic>> create(Map<String, dynamic> payload);
+  Future<Map<String, dynamic>> list(ClientQueryParams params);
+  Future<Map<String, dynamic>> create(CreateClientDto dto);
   Future<Map<String, dynamic>> getById(String id);
-  Future<Map<String, dynamic>> update(String id, Map<String, dynamic> payload);
+  Future<Map<String, dynamic>> update(String id, UpdateClientDto dto);
   Future<void> delete(String id);
+  Future<List<Map<String, dynamic>>> getUsersOptions();
 }
 
 class ClientRemoteDSImpl implements IClientRemoteDS {
@@ -14,21 +20,15 @@ class ClientRemoteDSImpl implements IClientRemoteDS {
   final Dio _dio;
 
   @override
-  Future<List<Map<String, dynamic>>> list({required bool admin, String? q}) async {
-    final res = await _dio.get(
-      '/clients',
-      queryParameters: {'admin': admin, if (q != null) 'q': q},
-    );
-
-    final data = res.data as List;
-
-    return data.cast<Map>().map((e) => Map<String, dynamic>.from(e)).toList();
+  Future<Map<String, dynamic>> list(ClientQueryParams params) async {
+    final queryParameters = ClientListParamsMapper.toQueryParameters(params);
+    final res = await _dio.get('/clients', queryParameters: queryParameters);
+    return Map<String, dynamic>.from(res.data as Map);
   }
 
   @override
-  Future<Map<String, dynamic>> create(Map<String, dynamic> payload) async {
-    final res = await _dio.post('/clients', data: payload);
-
+  Future<Map<String, dynamic>> create(CreateClientDto dto) async {
+    final res = await _dio.post('/clients', data: dto.toMap());
     return Map<String, dynamic>.from(res.data as Map);
   }
 
@@ -40,14 +40,19 @@ class ClientRemoteDSImpl implements IClientRemoteDS {
   }
 
   @override
-  Future<Map<String, dynamic>> update(String id, Map<String, dynamic> payload) async {
-    final res = await _dio.put('/clients/$id', data: payload);
-
+  Future<Map<String, dynamic>> update(String id, UpdateClientDto dto) async {
+    final res = await _dio.put('/clients/$id', data: dto.toMap());
     return Map<String, dynamic>.from(res.data as Map);
   }
 
   @override
   Future<void> delete(String id) async {
     await _dio.delete('/clients/$id');
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getUsersOptions() async {
+    final res = await _dio.get('/clients/users-options');
+    return List<Map<String, dynamic>>.from(res.data as List);
   }
 }

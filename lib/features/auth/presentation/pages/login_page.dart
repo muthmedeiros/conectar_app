@@ -20,8 +20,8 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   final _formKey = GlobalKey<FormState>();
-  final _email = TextEditingController();
-  final _password = TextEditingController();
+  final _email = TextEditingController(text: 'admin@conectar.com');
+  final _password = TextEditingController(text: 'admin123');
   bool _obscure = true;
 
   @override
@@ -39,7 +39,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: TSpacing.lg),
-              BrandLogo(height: TSpacing.xxxl, tintColor: TColors.neutral0),
+              const BrandLogo(height: TSpacing.xxxl, tintColor: TColors.neutral0),
               const SizedBox(height: TSpacing.lg),
               Card(
                 elevation: 0,
@@ -102,7 +102,9 @@ class _LoginPageState extends State<LoginPage> {
                             onPressed: auth.loading
                                 ? null
                                 : () async {
-                                    if (!_formKey.currentState!.validate()) return;
+                                    if (!_formKey.currentState!.validate()) {
+                                      return;
+                                    }
                                     final ok = await auth.login(_email.text.trim(), _password.text);
                                     if (ok && mounted) context.go('/home');
                                   },

@@ -1,3 +1,6 @@
+import 'package:jwt_decoder/jwt_decoder.dart';
+
+import '../../../../core/enums/user_role.dart';
 import '../../../../core/storage/secure_store.dart';
 import '../../domain/entities/user.dart';
 import '../../domain/repositories/auth_repository.dart';
@@ -14,15 +17,20 @@ class AuthRepositoryImpl implements AuthRepository {
     final data = await _ds.login(email, password);
 
     final token = data['accessToken'] as String;
+    final userId = JwtDecoder.decode(token)['sub'];
 
-    await _store.saveAccessToken(token);
+    await Future.wait([_store.saveUserUuid(userId), _store.saveAccessToken(token)]);
   }
 
   @override
   Future<User?> getCurrentUser() async {
-    final data = await _ds.getCurrentUser();
+    final userId = await _store.readUserUuid();
 
-    final user = data['user'] as Map<String, dynamic>?;
+    if (userId == null) return null;
+
+    final data = await _ds.getCurrentUser(userId);
+
+    final user = data as Map<String, dynamic>?;
 
     if (user == null) return null;
 
@@ -30,7 +38,7 @@ class AuthRepositoryImpl implements AuthRepository {
       id: user['id'],
       name: user['name'],
       email: user['email'],
-      isAdmin: (user['isAdmin'] ?? false) as bool,
+      role: UserRole.fromString(user['role'] as String),
     );
   }
 
