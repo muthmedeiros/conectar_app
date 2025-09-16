@@ -6,10 +6,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../../core/di/service_locator.dart';
 import '../../../../../core/input_formatters/cnpj_input_formatter.dart';
-import '../../../../../core/theme/tokens/colors.dart';
-import '../../../../../core/theme/tokens/font_sizes.dart';
-import '../../../../../core/theme/tokens/spacing.dart';
-import '../../../../../core/theme/tokens/typography.dart';
+import '../../../../../core/theme/tokens/tokens.dart';
 import '../../../../../core/validation/validators.dart';
 import '../../../../auth/presentation/controllers/auth_controller.dart';
 import '../../../domain/repositories/client_repository.dart';
@@ -27,7 +24,7 @@ class ClientFormPage extends StatelessWidget {
         repo: sl<ClientRepository>(),
         auth: ctx.read<AuthController>(),
         clientId: clientId,
-      ),
+      )..init(),
       child: _ClientForm(),
     );
   }
@@ -48,28 +45,43 @@ class _ClientFormState extends State<_ClientForm> {
   void initState() {
     super.initState();
 
-    WidgetsBinding.instance.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       final controller = context.read<ClientFormController>();
       controller.fetchUsers();
 
-      if (controller.isEdit) {
-        await controller.fetchClientById();
-
-        final client = controller.client;
-
-        if (client != null) {
-          _corporateReason.text = client.corporateReason;
-          _cnpj.text = client.cnpj;
-          _name.text = client.name;
+      controller.addListener(() {
+        if (controller.client != null) {
+          final client = controller.client!;
+          if (_corporateReason.text != client.corporateReason) {
+            _corporateReason.text = client.corporateReason;
+          }
+          if (_cnpj.text != client.cnpj) {
+            _cnpj.text = client.cnpj;
+          }
+          if (_name.text != client.name) {
+            _name.text = client.name;
+          }
         }
-      }
+      });
     });
+  }
+
+  @override
+  void dispose() {
+    _corporateReason.dispose();
+    _cnpj.dispose();
+    _name.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     final controller = context.watch<ClientFormController>();
     final isEdit = controller.isEdit;
+
+    if (controller.loading) {
+      return const Scaffold(body: Center(child: CircularProgressIndicator()));
+    }
 
     return Padding(
       padding: const EdgeInsets.all(TSpacing.xxxl),
@@ -96,20 +108,20 @@ class _ClientFormState extends State<_ClientForm> {
               decoration: const InputDecoration(labelText: 'Razão Social'),
               validator: Validators.required('Razão Social'),
             ),
-            const SizedBox(height: TSpacing.sm),
+            const SizedBox(height: TSpacing.md),
             TextFormField(
               controller: _cnpj,
               decoration: const InputDecoration(labelText: 'CNPJ'),
               validator: Validators.cnpj(),
               inputFormatters: [CnpjInputFormatter()],
             ),
-            const SizedBox(height: TSpacing.sm),
+            const SizedBox(height: TSpacing.md),
             TextFormField(
               controller: _name,
               decoration: const InputDecoration(labelText: 'Nome na Fachada'),
               validator: Validators.minLen(3, 'Nome na Fachada'),
             ),
-            const SizedBox(height: TSpacing.sm),
+            const SizedBox(height: TSpacing.md),
             DropdownButtonFormField<String>(
               decoration: const InputDecoration(labelText: 'Status'),
               value: controller.status,
@@ -121,7 +133,7 @@ class _ClientFormState extends State<_ClientForm> {
               onChanged: controller.updateStatus,
               validator: Validators.required('Status'),
             ),
-            const SizedBox(height: TSpacing.sm),
+            const SizedBox(height: TSpacing.md),
             DropdownButtonFormField<bool>(
               decoration: const InputDecoration(labelText: 'Conectar Plus'),
               value: controller.conectarPlus,
@@ -132,7 +144,7 @@ class _ClientFormState extends State<_ClientForm> {
               onChanged: controller.updateConectarPlus,
               validator: Validators.requiredDropdown<bool>('Conectar Plus'),
             ),
-            const SizedBox(height: TSpacing.sm),
+            const SizedBox(height: TSpacing.md),
             Visibility(
               visible: controller.loadingUsers,
               child: const Padding(
@@ -143,10 +155,17 @@ class _ClientFormState extends State<_ClientForm> {
             Visibility(
               visible: !controller.loadingUsers,
               child: DropdownButtonFormField<String>(
-                decoration: const InputDecoration(labelText: 'Usuário Administrador'),
+                decoration: const InputDecoration(
+                  labelText: 'Usuário Administrador',
+                ),
                 value: controller.adminUserId,
                 items: controller.users
-                    .map((u) => DropdownMenuItem<String>(value: u.id, child: Text(u.name)))
+                    .map(
+                      (u) => DropdownMenuItem<String>(
+                        value: u.id,
+                        child: Text(u.name),
+                      ),
+                    )
                     .toList(),
                 onChanged: controller.updateAdminUserId,
                 validator: Validators.required('Usuário Administrador'),
@@ -157,39 +176,60 @@ class _ClientFormState extends State<_ClientForm> {
               visible: controller.errorMsg != null,
               child: Text(
                 controller.errorMsg ?? '',
-                style: TTypography.interMedium(color: TColors.error, fontSize: TFontSizes.sm),
+                style: TTypography.interMedium(
+                  color: TColors.error,
+                  fontSize: TFontSizes.sm,
+                ),
               ),
             ),
             const SizedBox(height: TSpacing.sm),
-            FilledButton(
-              onPressed: controller.loading
-                  ? null
-                  : () async {
-                      if (!_form.currentState!.validate()) return;
+            Row(
+              children: [
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: controller.loading
+                        ? null
+                        : () => context.pop(false),
+                    child: const Text('Cancelar'),
+                  ),
+                ),
+                const SizedBox(width: TSpacing.md),
+                Expanded(
+                  child: ElevatedButton(
+                    onPressed: controller.loading
+                        ? null
+                        : () async {
+                            if (!_form.currentState!.validate()) return;
 
-                      final ok = await controller.submit(
-                        corporateReason: _corporateReason.text,
-                        cnpj: _cnpj.text,
-                        name: _name.text,
-                      );
+                            final success = await controller.submit(
+                              corporateReason: _corporateReason.text,
+                              cnpj: _cnpj.text,
+                              name: _name.text,
+                            );
 
-                      if (!mounted) return;
+                            if (!mounted) return;
 
-                      if (ok) {
-                        if (context.canPop()) {
-                          context.pop(true);
-                        } else {
-                          context.go('/home/clients');
-                        }
+                            if (success) {
+                              if (context.canPop()) {
+                                context.pop(true);
+                              } else {
+                                context.go('/home/clients');
+                              }
 
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Cliente criado com sucesso!')),
-                        );
-                      }
-                    },
-              child: controller.loading
-                  ? const CircularProgressIndicator()
-                  : Text(isEdit ? 'Salvar Alterações' : 'Salvar'),
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text(controller.successMsg!),
+                                  backgroundColor: TColors.primary,
+                                ),
+                              );
+                            }
+                          },
+                    child: controller.loading
+                        ? const CircularProgressIndicator()
+                        : Text(isEdit ? 'Atualizar' : 'Criar'),
+                  ),
+                ),
+              ],
             ),
           ],
         ),

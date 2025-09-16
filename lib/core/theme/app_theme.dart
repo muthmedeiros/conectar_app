@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'tokens/colors.dart';
-import 'tokens/radius.dart';
-import 'tokens/spacing.dart';
-import 'tokens/typography.dart';
+import 'tokens/tokens.dart';
 
 class AppTheme {
   static ThemeData light() {

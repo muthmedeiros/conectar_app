@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../theme/tokens/spacing.dart';
+import '../theme/tokens/tokens.dart';
 
 class BrandLogo extends StatelessWidget {
   const BrandLogo({super.key, this.height = TSpacing.xxxl, this.tintColor});
@@ -16,7 +16,6 @@ class BrandLogo extends StatelessWidget {
       fit: BoxFit.contain,
       color: tintColor,
       colorBlendMode: tintColor == null ? null : BlendMode.srcIn,
-      filterQuality: FilterQuality.medium,
       semanticLabel: 'Conéctar',
     );
   }

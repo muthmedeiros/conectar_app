@@ -12,7 +12,10 @@ class AuthRemoteDSImpl implements IAuthRemoteDS {
 
   @override
   Future<Map<String, dynamic>> login(String email, String password) async {
-    final res = await _dio.post('/auth/login', data: {'email': email, 'password': password});
+    final res = await _dio.post(
+      '/auth/login',
+      data: {'email': email, 'password': password},
+    );
 
     final response = Map<String, dynamic>.from(res.data as Map);
 

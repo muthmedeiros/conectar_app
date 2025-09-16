@@ -4,9 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:provider/provider.dart';
 
-import '../../../../core/theme/tokens/colors.dart';
-import '../../../../core/theme/tokens/radius.dart';
-import '../../../../core/theme/tokens/spacing.dart';
+import '../../../../core/theme/tokens/tokens.dart';
 import '../../../../core/validation/validators.dart';
 import '../../../../core/widgets/brand_logo.dart';
 import '../controllers/auth_controller.dart';
@@ -39,11 +37,13 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               const SizedBox(height: TSpacing.lg),
-              const BrandLogo(height: TSpacing.xxxl, tintColor: TColors.neutral0),
+              const BrandLogo(tintColor: TColors.neutral0),
               const SizedBox(height: TSpacing.lg),
               Card(
                 elevation: 0,
-                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TRadius.md)),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(TRadius.md),
+                ),
                 child: Padding(
                   padding: const EdgeInsets.all(TSpacing.lg),
                   child: Form(
@@ -53,19 +53,27 @@ class _LoginPageState extends State<LoginPage> {
                       children: [
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text('Email', style: Theme.of(context).textTheme.labelMedium),
+                          child: Text(
+                            'Email',
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
                         ),
                         const SizedBox(height: TSpacing.sm),
                         TextFormField(
                           controller: _email,
                           keyboardType: TextInputType.emailAddress,
-                          decoration: const InputDecoration(hintText: 'email@dominio.com'),
+                          decoration: const InputDecoration(
+                            hintText: 'email@dominio.com',
+                          ),
                           validator: Validators.email('Email'),
                         ),
                         const SizedBox(height: TSpacing.sm + 4),
                         Align(
                           alignment: Alignment.centerLeft,
-                          child: Text('Senha', style: Theme.of(context).textTheme.labelMedium),
+                          child: Text(
+                            'Senha',
+                            style: Theme.of(context).textTheme.labelMedium,
+                          ),
                         ),
                         const SizedBox(height: TSpacing.sm),
                         TextFormField(
@@ -74,8 +82,13 @@ class _LoginPageState extends State<LoginPage> {
                           decoration: InputDecoration(
                             hintText: '•••••••••',
                             suffixIcon: IconButton(
-                              onPressed: () => setState(() => _obscure = !_obscure),
-                              icon: Icon(_obscure ? Icons.visibility : Icons.visibility_off),
+                              onPressed: () =>
+                                  setState(() => _obscure = !_obscure),
+                              icon: Icon(
+                                _obscure
+                                    ? Icons.visibility
+                                    : Icons.visibility_off,
+                              ),
                             ),
                           ),
                           validator: Validators.minLen(4, 'Password'),
@@ -96,8 +109,12 @@ class _LoginPageState extends State<LoginPage> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(TRadius.sm),
                               ),
-                              padding: const EdgeInsets.symmetric(vertical: TSpacing.md),
-                              textStyle: Theme.of(context).textTheme.labelMedium,
+                              padding: const EdgeInsets.symmetric(
+                                vertical: TSpacing.md,
+                              ),
+                              textStyle: Theme.of(
+                                context,
+                              ).textTheme.labelMedium,
                             ),
                             onPressed: auth.loading
                                 ? null
@@ -105,15 +122,14 @@ class _LoginPageState extends State<LoginPage> {
                                     if (!_formKey.currentState!.validate()) {
                                       return;
                                     }
-                                    final ok = await auth.login(_email.text.trim(), _password.text);
+                                    final ok = await auth.login(
+                                      _email.text.trim(),
+                                      _password.text,
+                                    );
                                     if (ok && mounted) context.go('/home');
                                   },
                             child: auth.loading
-                                ? const SizedBox(
-                                    height: TSpacing.xxxl,
-                                    width: TSpacing.xxxl,
-                                    child: CircularProgressIndicator(strokeWidth: 2),
-                                  )
+                                ? const CircularProgressIndicator()
                                 : const Text('Entrar'),
                           ),
                         ),

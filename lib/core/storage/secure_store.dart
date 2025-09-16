@@ -2,6 +2,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class SecureStore {
   final _storage = const FlutterSecureStorage();
+
   static const _kAccess = 'access_token';
   static const _kUserUuid = 'user_uuid';
 

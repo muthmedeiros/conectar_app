@@ -22,6 +22,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
+
     if (!_fetched) {
       _fetched = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -43,21 +44,21 @@ class _HomePageState extends State<HomePage> {
         titleSpacing: 0,
         title: Row(
           children: [
-            const SizedBox(width: TSpacing.sm),
-            BrandLogo(height: TSpacing.xxl, tintColor: scheme.onPrimary),
             const SizedBox(width: TSpacing.md),
+            BrandLogo(tintColor: scheme.onPrimary),
+            const SizedBox(width: TSpacing.lg),
             const AppbarNavigationButton(label: 'Clientes', route: '/home/clients'),
-            const SizedBox(width: TSpacing.md),
-            const AppbarNavigationButton(label: 'Perfil', route: '/home/profile'),
             if (auth.user != null && auth.user!.isAdmin) ...[
               const SizedBox(width: TSpacing.md),
               const AppbarNavigationButton(label: 'Usuários', route: '/home/users'),
             ],
+            const SizedBox(width: TSpacing.md),
+            const AppbarNavigationButton(label: 'Perfil', route: '/home/profile'),
           ],
         ),
         actions: [
-          IconButton(onPressed: () {}, icon: const Icon(Icons.help_outline)),
-          IconButton(onPressed: () {}, icon: const Icon(Icons.notifications_none)),
+          const IconButton(onPressed: null, icon: Icon(Icons.help_outline)),
+          const IconButton(onPressed: null, icon: Icon(Icons.notifications_none)),
           IconButton(
             onPressed: () {
               auth.logout();

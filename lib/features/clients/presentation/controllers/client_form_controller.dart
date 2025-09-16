@@ -11,10 +11,13 @@ import '../../domain/entities/client_user_option.dart';
 import '../../domain/repositories/client_repository.dart';
 
 class ClientFormController extends ChangeNotifier {
-  ClientFormController({required this.repo, required this.auth, String? clientId})
-    : policy = AccessPolicy(),
-      isEdit = clientId != null,
-      _clientId = clientId;
+  ClientFormController({
+    required this.repo,
+    required this.auth,
+    String? clientId,
+  }) : policy = AccessPolicy(),
+       isEdit = clientId != null,
+       _clientId = clientId;
 
   final ClientRepository repo;
   final AuthController auth;
@@ -53,6 +56,12 @@ class ClientFormController extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> init() async {
+    if (isEdit && _clientId != null) {
+      await _fetchClientById();
+    }
+  }
+
   Future<void> fetchUsers() async {
     loadingUsers = true;
     notifyListeners();
@@ -67,7 +76,7 @@ class ClientFormController extends ChangeNotifier {
     }
   }
 
-  Future<void> fetchClientById() async {
+  Future<void> _fetchClientById() async {
     if (_clientId == null) return;
 
     loading = true;
@@ -97,9 +106,17 @@ class ClientFormController extends ChangeNotifier {
     required String name,
   }) {
     if (isEdit) {
-      return updateClient(corporateReason: corporateReason, cnpj: cnpj, name: name);
+      return updateClient(
+        corporateReason: corporateReason,
+        cnpj: cnpj,
+        name: name,
+      );
     } else {
-      return createClient(corporateReason: corporateReason, cnpj: cnpj, name: name);
+      return createClient(
+        corporateReason: corporateReason,
+        cnpj: cnpj,
+        name: name,
+      );
     }
   }
 

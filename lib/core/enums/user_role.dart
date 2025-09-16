@@ -1,6 +1,9 @@
 enum UserRole {
-  admin,
-  user;
+  admin('admin'),
+  user('user');
+
+  const UserRole(this.value);
+  final String value;
 
   bool get isAdmin => this == UserRole.admin;
   bool get isUser => this == UserRole.user;

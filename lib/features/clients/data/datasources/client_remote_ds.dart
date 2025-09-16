@@ -3,7 +3,6 @@ import 'package:dio/dio.dart';
 import '../../domain/entities/client_query_params.dart';
 import '../dtos/create_client_dto.dart';
 import '../dtos/update_client_dto.dart';
-import '../mappers/client_list_params_mapper.dart';
 
 abstract class IClientRemoteDS {
   Future<Map<String, dynamic>> list(ClientQueryParams params);
@@ -21,7 +20,7 @@ class ClientRemoteDSImpl implements IClientRemoteDS {
 
   @override
   Future<Map<String, dynamic>> list(ClientQueryParams params) async {
-    final queryParameters = ClientListParamsMapper.toQueryParameters(params);
+    final queryParameters = params.toQueryParameters();
     final res = await _dio.get('/clients', queryParameters: queryParameters);
     return Map<String, dynamic>.from(res.data as Map);
   }

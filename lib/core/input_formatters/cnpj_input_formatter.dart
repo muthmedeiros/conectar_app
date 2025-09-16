@@ -7,15 +7,14 @@ class CnpjInputFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    String digits = newValue.text.replaceAll(RegExp(r'\D'), '');
-    StringBuffer buffer = StringBuffer();
+    final digits = newValue.text.replaceAll(RegExp(r'\D'), '');
+    final buffer = StringBuffer();
 
     for (int i = 0; i < digits.length && i < 14; i++) {
       if (i == 2 || i == 5) buffer.write('.');
       if (i == 8) buffer.write('/');
       if (i == 12) buffer.write('-');
       buffer.write(digits[i]);
-
     }
     return TextEditingValue(
       text: buffer.toString(),

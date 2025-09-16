@@ -13,25 +13,25 @@ class AuthRepositoryImpl implements AuthRepository {
   final SecureStore _store;
 
   @override
-  Future<void> login({required String email, required String password}) async {
+  Future<String> login({required String email, required String password}) async {
     final data = await _ds.login(email, password);
 
     final token = data['accessToken'] as String;
-    final userId = JwtDecoder.decode(token)['sub'];
+    await _store.saveAccessToken(token);
 
-    await Future.wait([_store.saveUserUuid(userId), _store.saveAccessToken(token)]);
+    final userId = JwtDecoder.decode(token)['sub'];
+    await _store.saveUserUuid(userId);
+
+    return userId;
   }
 
   @override
-  Future<User?> getCurrentUser() async {
-    final userId = await _store.readUserUuid();
+  Future<User?> getCurrentUser([String? userId]) async {
+    final currentUserId = await _store.readUserUuid();
+    if (currentUserId == null) return null;
 
-    if (userId == null) return null;
-
-    final data = await _ds.getCurrentUser(userId);
-
+    final data = await _ds.getCurrentUser(currentUserId);
     final user = data as Map<String, dynamic>?;
-
     if (user == null) return null;
 
     return User(

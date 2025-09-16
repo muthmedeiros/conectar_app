@@ -6,7 +6,8 @@ import '../../features/clients/presentation/pages/view/clients_page.dart';
 import '../../features/home/presentation/pages/home_page.dart';
 import '../../features/profile/presentation/pages/profile_page.dart';
 import '../../features/splash/presentation/pages/splash_gate.dart';
-import '../../features/users/presentation/users_page.dart';
+import '../../features/users/presentation/pages/form/user_form_page.dart';
+import '../../features/users/presentation/pages/view/users_page.dart';
 import 'route_guards.dart';
 
 GoRouter buildRouter() {
@@ -14,10 +15,15 @@ GoRouter buildRouter() {
     initialLocation: '/',
     routes: [
       GoRoute(path: '/', builder: (_, __) => const SplashGate()),
-      GoRoute(path: '/login', redirect: loginGuard, builder: (_, __) => const LoginPage()),
+      GoRoute(
+        path: '/login',
+        redirect: loginGuard,
+        builder: (_, __) => const LoginPage(),
+      ),
       ShellRoute(
         redirect: authGuard,
-        builder: (_, state, child) => HomePage(key: state.pageKey, child: child),
+        builder: (_, state, child) =>
+            HomePage(key: state.pageKey, child: child),
         routes: [
           GoRoute(path: '/home', redirect: (_, __) => '/home/clients'),
           GoRoute(
@@ -33,7 +39,10 @@ GoRouter buildRouter() {
           GoRoute(
             path: '/home/clients/:id',
             redirect: authGuard,
-            builder: (_, st) => ClientFormPage(key: st.pageKey, clientId: st.pathParameters['id']!),
+            builder: (_, st) => ClientFormPage(
+              key: st.pageKey,
+              clientId: st.pathParameters['id']!,
+            ),
           ),
           GoRoute(
             path: '/home/profile',
@@ -44,6 +53,17 @@ GoRouter buildRouter() {
             path: '/home/users',
             redirect: adminGuard,
             builder: (_, state) => UsersPage(key: state.pageKey),
+          ),
+          GoRoute(
+            path: '/home/users/new',
+            redirect: adminGuard,
+            builder: (_, state) => UserFormPage(key: state.pageKey),
+          ),
+          GoRoute(
+            path: '/home/users/:id',
+            redirect: adminGuard,
+            builder: (_, st) =>
+                UserFormPage(key: st.pageKey, userId: st.pathParameters['id']!),
           ),
         ],
       ),

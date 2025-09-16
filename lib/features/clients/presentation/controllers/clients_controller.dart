@@ -13,13 +13,14 @@ import '../../domain/enums/client_status.dart';
 import '../../domain/repositories/client_repository.dart';
 
 class ClientsController extends ChangeNotifier {
-  ClientsController({required this.repo, required this.auth}) : policy = AccessPolicy();
+  ClientsController({required this.repo, required this.auth})
+    : policy = AccessPolicy();
 
   final ClientRepository repo;
   final AuthController auth;
   final AccessPolicy policy;
 
-  var loading = false;
+  bool loading = false;
   String? errorMsg;
 
   String? search;
@@ -29,6 +30,7 @@ class ClientsController extends ChangeNotifier {
   OrderDirection? order = OrderDirection.desc;
   int page = 1;
   int limit = 20;
+  int totalItems = 0;
   int totalPages = 0;
 
   List<ClientEntity> items = [];
@@ -49,9 +51,10 @@ class ClientsController extends ChangeNotifier {
     );
 
     try {
-      final paginated = await repo.list(queryParams);
-      items = paginated.clients;
-      totalPages = paginated.totalPages;
+      final paginatedClients = await repo.list(queryParams);
+      items = paginatedClients.clients;
+      totalItems = paginatedClients.total;
+      totalPages = paginatedClients.totalPages;
     } on DioException catch (e) {
       final err = ErrorMapper.fromDio(e);
       errorMsg = err.message;

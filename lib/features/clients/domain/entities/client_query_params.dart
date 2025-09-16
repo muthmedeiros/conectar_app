@@ -1,8 +1,10 @@
+import 'package:equatable/equatable.dart';
+
 import '../../../../core/enums/order_direction.dart';
 import '../enums/client_order_by.dart';
 import '../enums/client_status.dart';
 
-class ClientQueryParams {
+class ClientQueryParams extends Equatable {
   const ClientQueryParams({
     this.search,
     this.status,
@@ -32,4 +34,15 @@ class ClientQueryParams {
       'limit': limit,
     };
   }
+
+  @override
+  List<Object?> get props => [
+    search,
+    status,
+    conectarPlus,
+    orderBy,
+    order,
+    page,
+    limit,
+  ];
 }

@@ -37,7 +37,9 @@ class _ClientsFilterSectionState extends State<ClientsFilterSection> {
     return Card(
       margin: const EdgeInsets.all(TSpacing.md),
       color: TColors.neutral3,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TRadius.md)),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(TRadius.md),
+      ),
       child: Padding(
         padding: const EdgeInsets.all(TSpacing.lg),
         child: ExpansionTile(
@@ -46,7 +48,9 @@ class _ClientsFilterSectionState extends State<ClientsFilterSection> {
           childrenPadding: EdgeInsets.zero,
           backgroundColor: TColors.neutral3,
           collapsedBackgroundColor: TColors.neutral3,
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TRadius.md)),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(TRadius.md),
+          ),
           title: Row(
             children: [
               const Icon(Icons.search, color: TColors.primary),
@@ -61,20 +65,30 @@ class _ClientsFilterSectionState extends State<ClientsFilterSection> {
               const SizedBox(width: TSpacing.sm),
               Text(
                 'Filtre e busque os clientes',
-                style: TTypography.interRegular(color: TColors.neutral6, fontSize: TFontSizes.sm),
+                style: TTypography.interRegular(
+                  color: TColors.neutral6,
+                  fontSize: TFontSizes.sm,
+                ),
               ),
               const Spacer(),
               Visibility(
                 visible: hasFilters,
                 child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8,
+                    vertical: 4,
+                  ),
                   decoration: BoxDecoration(
                     color: TColors.primary.withOpacity(0.1),
                     borderRadius: BorderRadius.circular(TRadius.sm),
                   ),
                   child: Row(
                     children: [
-                      const Icon(Icons.filter_alt, color: TColors.primary, size: 16),
+                      const Icon(
+                        Icons.filter_alt,
+                        color: TColors.primary,
+                        size: 16,
+                      ),
                       const SizedBox(width: 4),
                       Text(
                         'Filtros ativos',
@@ -100,17 +114,24 @@ class _ClientsFilterSectionState extends State<ClientsFilterSection> {
                   width: 240,
                   child: TextField(
                     controller: _textSearchController,
-                    decoration: const InputDecoration(labelText: 'Buscar por nome ou CNPJ'),
+                    decoration: const InputDecoration(
+                      labelText: 'Buscar por nome ou CNPJ',
+                    ),
                     onChanged: controller.setSearch,
                   ),
                 ),
                 SizedBox(
                   width: 200,
                   child: DropdownButtonFormField<ClientStatus?>(
-                    decoration: const InputDecoration(labelText: 'Buscar por status'),
+                    decoration: const InputDecoration(
+                      labelText: 'Buscar por status',
+                    ),
                     value: controller.status,
                     items: ClientStatus.values
-                        .map((s) => DropdownMenuItem(value: s, child: Text(s.label)))
+                        .map(
+                          (s) =>
+                              DropdownMenuItem(value: s, child: Text(s.label)),
+                        )
                         .toList(),
                     onChanged: controller.setStatus,
                   ),
@@ -118,7 +139,9 @@ class _ClientsFilterSectionState extends State<ClientsFilterSection> {
                 SizedBox(
                   width: 200,
                   child: DropdownButtonFormField<bool?>(
-                    decoration: const InputDecoration(labelText: 'Buscar por conectar+'),
+                    decoration: const InputDecoration(
+                      labelText: 'Buscar por conectar+',
+                    ),
                     value: controller.conectarPlus,
                     items: const [
                       DropdownMenuItem(child: Text('Selecione')),
@@ -134,7 +157,10 @@ class _ClientsFilterSectionState extends State<ClientsFilterSection> {
                     decoration: const InputDecoration(labelText: 'Ordenar por'),
                     value: controller.orderBy,
                     items: ClientOrderBy.values
-                        .map((o) => DropdownMenuItem(value: o, child: Text(o.label)))
+                        .map(
+                          (o) =>
+                              DropdownMenuItem(value: o, child: Text(o.label)),
+                        )
                         .toList(),
                     onChanged: controller.setOrderBy,
                   ),
@@ -145,7 +171,10 @@ class _ClientsFilterSectionState extends State<ClientsFilterSection> {
                     decoration: const InputDecoration(labelText: 'Direção'),
                     value: controller.order,
                     items: OrderDirection.values
-                        .map((d) => DropdownMenuItem(value: d, child: Text(d.value)))
+                        .map(
+                          (d) =>
+                              DropdownMenuItem(value: d, child: Text(d.label)),
+                        )
                         .toList(),
                     onChanged: controller.setOrder,
                   ),
@@ -172,7 +201,9 @@ class _ClientsFilterSectionState extends State<ClientsFilterSection> {
                   style: ElevatedButton.styleFrom(
                     backgroundColor: TColors.primary,
                     foregroundColor: TColors.neutral0,
-                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TRadius.sm)),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(TRadius.sm),
+                    ),
                   ),
                   onPressed: controller.fetch,
                   child: const Text('Filtrar'),

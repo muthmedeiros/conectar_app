@@ -13,7 +13,7 @@ class AuthController extends ChangeNotifier {
   final AuthRepository repo;
   final AccessPolicy policy;
 
-  var loading = false;
+  bool loading = false;
   String? errorMsg;
   User? user;
 

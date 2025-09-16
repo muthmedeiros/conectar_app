@@ -15,9 +15,10 @@ class ClientsPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider<ClientsController>(
-      create: (ctx) =>
-          ClientsController(repo: sl<ClientRepository>(), auth: ctx.read<AuthController>())
-            ..fetch(),
+      create: (ctx) => ClientsController(
+        repo: sl<ClientRepository>(),
+        auth: ctx.read<AuthController>(),
+      )..fetch(),
       child: const _ClientsPageContent(),
     );
   }
