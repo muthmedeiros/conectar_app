@@ -94,6 +94,7 @@ class _ClientsFilterSectionState extends State<ClientsFilterSection> {
             Wrap(
               spacing: TSpacing.lg,
               runSpacing: TSpacing.md,
+              alignment: WrapAlignment.center,
               children: [
                 SizedBox(
                   width: 240,

@@ -51,26 +51,29 @@ class ClientsListingSection extends StatelessWidget {
                 OutlinedButton(
                   style: ElevatedButton.styleFrom(
                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(TRadius.xs)),
-                    side: const BorderSide(color: TColors.neutral100),
+                    side: const BorderSide(),
                     backgroundColor: TColors.neutral3,
-                    textStyle: TTypography.interMedium(
-                      color: TColors.neutral100,
-                      fontSize: TFontSizes.sm,
-                    ),
                     padding: const EdgeInsets.symmetric(
-                      horizontal: TSpacing.lg,
-                      vertical: TSpacing.sm,
+                      horizontal: TSpacing.xxl,
+                      vertical: TSpacing.md,
                     ),
                   ),
                   onPressed: () => context.push('/home/clients/new').then((didCreate) {
                     if (didCreate == true && context.mounted) {
                       context.read<ClientsController>().fetch();
+
                       ScaffoldMessenger.of(
                         context,
                       ).showSnackBar(const SnackBar(content: Text('Cliente criado com sucesso!')));
                     }
                   }),
-                  child: const Text('Novo'),
+                  child: Text(
+                    'Novo',
+                    style: TTypography.interMedium(
+                      color: TColors.neutral100,
+                      fontSize: TFontSizes.sm,
+                    ),
+                  ),
                 ),
               ],
             ),
