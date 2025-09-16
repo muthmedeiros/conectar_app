@@ -11,7 +11,7 @@ class AppbarNavigationButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
 
-    bool selected = GoRouterState.of(context).uri.toString().startsWith(route);
+    final bool selected = GoRouterState.of(context).uri.toString().startsWith(route);
 
     return TextButton(
       onPressed: () => context.go(route),

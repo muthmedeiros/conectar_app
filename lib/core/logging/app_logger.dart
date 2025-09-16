@@ -8,9 +8,6 @@ class AppLogger {
     l = Logger(
       printer: PrettyPrinter(
         methodCount: 0,
-        errorMethodCount: 8,
-        lineLength: 120,
-        printEmojis: true,
         noBoxingByDefault: true,
       ),
       level: kReleaseMode ? Level.off : Level.debug,
