@@ -19,6 +19,8 @@ jobs:
           channel: 'stable'
       - name: Install dependencies
         run: flutter pub get
+      - name: Criar .env vazio para testes
+        run: echo '' > .env && echo '' > .local.env
       - name: Run tests with coverage
         run: flutter test --coverage
       - name: Upload coverage artifact
