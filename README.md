@@ -130,6 +130,18 @@ O projeto inclui `.vscode/settings.json` e `.vscode/launch.json` para padroniza�
 
 ---
 
+## 🤖 Integração Contínua (GitHub Actions)
+
+O projeto possui uma configuração simples de GitHub Actions para rodar os testes automatizados sempre que houver push ou pull request para a branch `main`. O workflow executa:
+
+- Instalação das dependências do Flutter
+- Execução dos testes com cobertura (`flutter test --coverage`)
+- Upload do relatório de cobertura como artefato
+
+O arquivo de configuração está em `.github/workflows/test.yml`.
+
+Assim, garantimos que todos os commits na branch principal estejam sempre validados por testes automatizados.
+
 ## ✅ Resumo
 
 - **Env**: Copie `.example.env` → `.env`
