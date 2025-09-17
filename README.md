@@ -70,6 +70,12 @@ O app suporta arquivos de ambiente separados para desenvolvimento local e produ�
 
 ---
 
+
+## 🌐 Deploy Web (Netlify)
+
+O app web está publicado manualmente em: [https://conectarapp.netlify.app](https://conectarapp.netlify.app)
+
+---
 ## 🛠️ Desenvolvimento
 
 ### 1. Instalar dependências

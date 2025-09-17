@@ -52,3 +52,6 @@ app.*.map.json
 .fvm/
 .vercel
 .env*.local
+
+# Local Netlify folder
+.netlify
